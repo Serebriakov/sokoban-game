@@ -1,0 +1,14 @@
+CFLAGS = -g -Wall
+EXEC = bin/prog
+
+all: $(EXEC)
+
+bin/prog: obj/%.o
+	gcc $^ -o $@
+
+obj/%.o: src/%.c
+	gcc -o $@ -c $< $(CFLAGS)
+
+clean: 
+	rm -rf obj/*.o
+

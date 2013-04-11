@@ -6,30 +6,31 @@
 #include "Joueur.h"
 
 
-void initialiserJoueur(Joueur* j, const char* pseudo)
+void creerJoueur(Joueur* j, const char* pseudo)
 {
     assert(strlen(pseudo) < 16);
     strcpy(j->pseudo, pseudo);
     j->avancement = 1;
 
-    strcpy(j->fichier, "../data/joueurs/");
-    strcat(j->fichier, j->pseudo);
-    strcat(j->fichier, ".sok");
-
     /* Sauvegarde des données du joueur */
-    FILE* fic = fopen(j->fichier, "wb");
-    fwrite(j->pseudo, 16, 1, fic);
-    fwrite(&(j->avancement), 4, 1, fic);
+    char fichier[36];
+    strcpy(fichier, "../data/joueurs/");
+    strcat(fichier, j->pseudo);
+    strcat(fichier, ".sok");
+    FILE* fic = fopen(fichier, "wb");
+    fwrite(j, sizeof(Joueur), 1, fic);
     fclose(fic);
 }
 
 
-void chargerJoueur(Joueur* j, const char* fichier)
+void chargerJoueur(Joueur* j, const char* pseudo)
 {
-    strcpy(j->fichier, fichier);
+    char fichier[36];
+    strcpy(fichier, "../data/joueurs/");
+    strcat(fichier, pseudo);
+    strcat(fichier, ".sok");
     FILE* fic = fopen(fichier, "rb");
-    fread(j->pseudo, 16, 1, fic);
-    fread(&j->avancement, 4, 1, fic);
+    fread(j, sizeof(Joueur), 1, fic);
     fclose(fic);
 }
 
@@ -59,7 +60,13 @@ int obtenirAvancement(Joueur* j)
 void modifierAvancement(Joueur* j, int niv)
 {
     j->avancement = niv;
-    FILE* fic = fopen(j->fichier, "a+b");
+
+    /* Sauvegarde des données du joueur */
+    char fichier[36];
+    strcpy(fichier, "../data/joueurs");
+    strcat(fichier, j->pseudo);
+    strcat(fichier, ".sok");
+    FILE* fic = fopen(fichier, "a+b");
     fseek(fic, 16, SEEK_SET);
     fwrite(&j->avancement, 4, 1, fic);
     fclose(fic);
@@ -68,5 +75,9 @@ void modifierAvancement(Joueur* j, int niv)
 
 void supprimerJoueur(Joueur* j)
 {
-    remove(j->fichier);
+    char fichier[36];
+    strcpy(fichier, "../data/joueurs");
+    strcat(fichier, j->pseudo);
+    strcat(fichier, ".sok");
+    remove(fichier);
 }

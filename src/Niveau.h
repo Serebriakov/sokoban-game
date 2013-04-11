@@ -9,26 +9,37 @@
  */
 
 
-#define BLOCS_LARGEUR 15
-#define BLOCS_HAUTEUR 15
-
-
  /** \struct Niveau */
  typedef struct
  {
-    int tab[BLOCS_LARGEUR][BLOCS_HAUTEUR];
+    int num;
+    int dimx;
+    int dimy;
+    int **tab;
  } Niveau;
+
+
+ /**
+
+  \fn void initialiserNiveau(Niveau *n, int dimx, int dimy)
+  \brief Initialise un niveau
+  \param[in, out] n Pointe sur le niveau à initialiser
+  \param[in] dimx Nombre de blocs en largeur
+  \param[in] dimy Nombre de blocs en hauteur
+
+  */
+void initialiserNiveau(Niveau *n, int dimx, int dimy);
 
 
 /**
 
  \fn void chargerNiveau(Niveau *n, const char *fichier)
  \brief Charge un niveau
- \param[in, out] n Pointe sur le niveau à charger
- \param[in] fichier Nom du fichier à charger
+ \param[in, out] n Pointe sur un niveau
+ \param[in] niv Niveau à charger
 
  */
-void chargerNiveau(Niveau *n, const char *fichier);
+void chargerNiveau(Niveau *n, const char* niv);
 
 
 /**
@@ -40,6 +51,41 @@ void chargerNiveau(Niveau *n, const char *fichier);
 
  */
 void sauvegarderNiveau(const Niveau *n, const char *fichier);
+
+
+/**
+
+ \fn int obtenirElementNiveau(const Niveau *n, int x, int y)
+ \brief Retourne l'élément de coordonnées (x,y)
+ \param[in] n Niveau
+ \param[in] x Première coordonnée
+ \param[in] y Deuxième coordonnée
+
+ */
+int obtenirElementNiveau(const Niveau *n, int x, int y);
+
+
+/**
+
+ \fn void modifierElementNiveau(const Niveau *n, int x, int y, int e)
+ \brief Modifie l'élément de coordonnées (x,y)
+ \param[in] n Niveau
+ \param[in] x Première coordonnée
+ \param[in] y Deuxième coordonnée
+ \param[in] e Nouvel élément$
+
+ */
+void modifierElementNiveau(const Niveau *n, int x, int y, int e);
+
+
+/**
+
+ \fn void libererNiveau(Niveau *n)
+ \brief Libère un niveau
+ \param[in, out] n Pointe sur le niveau à libérer
+
+ */
+void libererNiveau(Niveau *n);
 
 
 #endif
