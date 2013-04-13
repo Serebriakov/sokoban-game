@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 #include "Niveau.h"
@@ -41,7 +42,7 @@ void chargerNiveau(Niveau *n, const char *niv)
     initialiserNiveau(n, dimx, dimy);
 
     /* On recopie les données récupérées */
-    n->num = niv;
+    n->num = atoi(niv);
     n->dimx = dimx;
     n->dimy = dimy;
     int i, j;
@@ -54,31 +55,31 @@ void chargerNiveau(Niveau *n, const char *niv)
             case '0': // Joueur
                 n->tab[j][i] = 0;
                 break;
-            case '1': // Cible
+            case '1': // Vide
                 n->tab[j][i] = 1;
                 break;
-            case '2': // Caisse
+            case '2': // Case cible
                 n->tab[j][i] = 2;
                 break;
-            case '3': // Mur
+            case '3': // Caisse
                 n->tab[j][i] = 3;
                 break;
-            case '4': // Elem4
+            case '4': // Caisse sur une case cible
                 n->tab[j][i] = 4;
                 break;
-            case '5': // Elem5
+            case '5': // Mur
                 n->tab[j][i] = 5;
                 break;
-            case '6': // Elem6
+            case '6': // Element decor
                 n->tab[j][i] = 6;
                 break;
-            case '7': // Elem7
+            case '7': // Element décor
                 n->tab[j][i] = 7;
                 break;
-            case '8': // Elem8
+            case '8': // Element décor
                 n->tab[j][i] = 8;
                 break;
-            case '9': // Elem9
+            case '9': // Element décor
                 n->tab[j][i] = 9;
                 break;
             }
@@ -93,7 +94,7 @@ int obtenirElementNiveau(const Niveau *n, int x, int y)
 	assert(y >= 0);
 	assert(x < n->dimx);
 	assert(y < n->dimy);
-	return n->tab[y][x];
+	return n->tab[x][y];
 }
 
 
@@ -103,7 +104,7 @@ void modifierElementNiveau(const Niveau *n, int x, int y, int e)
 	assert(y >= 0);
 	assert(x < n->dimx);
 	assert(y < n->dimy);
-    n->tab[y][x] = e;
+    n->tab[x][y] = e;
 }
 
 
