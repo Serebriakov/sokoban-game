@@ -19,6 +19,9 @@
  } Niveau;
 
 
+enum {JOUEUR, VIDE, CIBLE, CAISSE, CAISSE_OK, MUR};
+
+
  /**
 
   \fn void initialiserNiveau(Niveau *n, int dimx, int dimy)

@@ -9,4 +9,13 @@
  */
 
 
+/**
+
+ \fn void afficherListeJoueurs
+ \brief Affiche la liste des joueurs
+
+ */
+void afficherListeJoueurs();
+
+
 #endif
