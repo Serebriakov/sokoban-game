@@ -25,12 +25,12 @@ void chargerNiveau(Niveau *n, const char *niv)
 
     /* On récupère les dimensions du niveau */
     char fichier[36];
-    strcpy(fichier, "../data/niveaux/");
+    strcpy(fichier, "data/niveaux/");
     strcat(fichier, niv);
     strcat(fichier, ".sok");
 
     FILE *fic = fopen(fichier, "r");
-    fscanf(fic, "%d%d", &dimx, &dimy);
+    fscanf(fic, "%d %d ", &dimx, &dimy);
 
     /* On récupère le tableau d'entiers du niveau */
     char ligneFichier[dimx*dimy+1];
@@ -53,34 +53,34 @@ void chargerNiveau(Niveau *n, const char *niv)
             switch(ligneFichier[i*dimx+j])
             {
             case '0': // Joueur
-                n->tab[j][i] = 0;
+                n->tab[i][j] = 0;
                 break;
             case '1': // Vide
-                n->tab[j][i] = 1;
+                n->tab[i][j] = 1;
                 break;
             case '2': // Case cible
-                n->tab[j][i] = 2;
+                n->tab[i][j] = 2;
                 break;
             case '3': // Caisse
-                n->tab[j][i] = 3;
+                n->tab[i][j] = 3;
                 break;
             case '4': // Caisse sur une case cible
-                n->tab[j][i] = 4;
+                n->tab[i][j] = 4;
                 break;
             case '5': // Mur
-                n->tab[j][i] = 5;
+                n->tab[i][j] = 5;
                 break;
             case '6': // Element decor
-                n->tab[j][i] = 6;
+                n->tab[i][j] = 6;
                 break;
             case '7': // Element décor
-                n->tab[j][i] = 7;
+                n->tab[i][j] = 7;
                 break;
             case '8': // Element décor
-                n->tab[j][i] = 8;
+                n->tab[i][j] = 8;
                 break;
             case '9': // Element décor
-                n->tab[j][i] = 9;
+                n->tab[i][j] = 9;
                 break;
             }
         }
@@ -118,7 +118,7 @@ void sauvegarderNiveau(const Niveau *n, const char *fichier)
     {
         for (j = 0 ; j < n->dimy ; j++)
         {
-            fprintf(fic, "%d", n->tab[j][i]);
+            fprintf(fic, "%d", n->tab[i][j]);
         }
     }
     fclose(fic);

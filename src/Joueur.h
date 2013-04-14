@@ -37,18 +37,7 @@ void creerJoueur(Joueur* j, const char* pseudo);
  \param[in] pseudo Pseudo du joueur à charger
 
  */
-void chargerJoueur(Joueur* j, const char* fichier);
-
-
-/**
-
- \fn void egaliteJoueur(const Joueur j1, const Joueur j2)
- \brief Teste si deux joueurs ont les mêmes données
- \param[in] j1 Joueur 1
- \param[in] j2 Joueur 2
-
- */
-int egaliteJoueur(const Joueur j1, const Joueur j2);
+void chargerJoueur(Joueur* j, const char* pseudo);
 
 
 /**
