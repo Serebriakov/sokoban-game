@@ -45,9 +45,9 @@ void afficherNumNiveau(const Niveau *n)
 void afficherNiveau(const Niveau *n)
 {
     int i, j;
-    for (j = 0; j < n->dimy; j++)
+    for (i = 0; i < n->dimy; i++)
     {
-        for (i = 0; i < n->dimx; i++)
+        for (j = 0; j < n->dimx; j++)
         {
             printf("%d ", obtenirElementNiveau(n, i, j));
         }

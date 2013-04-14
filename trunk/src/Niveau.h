@@ -13,8 +13,8 @@
  typedef struct
  {
     int num;
-    int dimx;
-    int dimy;
+    int dimx; // Largeur = nombre de colonnes
+    int dimy; // Hauteur = nombre de lignes
     int **tab;
  } Niveau;
 

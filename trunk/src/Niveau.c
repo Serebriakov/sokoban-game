@@ -53,34 +53,34 @@ void chargerNiveau(Niveau *n, const char *niv)
             switch(ligneFichier[i*dimx+j])
             {
             case '0': // Joueur
-                n->tab[i][j] = 0;
+                n->tab[j][i] = 0;
                 break;
             case '1': // Vide
-                n->tab[i][j] = 1;
+                n->tab[j][i] = 1;
                 break;
             case '2': // Case cible
-                n->tab[i][j] = 2;
+                n->tab[j][i] = 2;
                 break;
             case '3': // Caisse
-                n->tab[i][j] = 3;
+                n->tab[j][i] = 3;
                 break;
             case '4': // Caisse sur une case cible
-                n->tab[i][j] = 4;
+                n->tab[j][i] = 4;
                 break;
             case '5': // Mur
-                n->tab[i][j] = 5;
+                n->tab[j][i] = 5;
                 break;
             case '6': // Element decor
-                n->tab[i][j] = 6;
+                n->tab[j][i] = 6;
                 break;
             case '7': // Element décor
-                n->tab[i][j] = 7;
+                n->tab[j][i] = 7;
                 break;
             case '8': // Element décor
-                n->tab[i][j] = 8;
+                n->tab[j][i] = 8;
                 break;
             case '9': // Element décor
-                n->tab[i][j] = 9;
+                n->tab[j][i] = 9;
                 break;
             }
         }
@@ -118,7 +118,7 @@ void sauvegarderNiveau(const Niveau *n, const char *fichier)
     {
         for (j = 0 ; j < n->dimy ; j++)
         {
-            fprintf(fic, "%d", n->tab[i][j]);
+            fprintf(fic, "%d", n->tab[j][i]);
         }
     }
     fclose(fic);
