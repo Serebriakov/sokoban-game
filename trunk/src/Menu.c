@@ -24,3 +24,4 @@ void menuLibere(Menu* m)
 {
     m->nb_lignes = 0;
 }
+

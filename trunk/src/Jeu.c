@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+
 #include "Jeu.h"
-#include "Joueur.h"
-#include "Niveau.h"
 
 
 void initialiserJeu(Jeu *j, const char *pseudo)
@@ -261,8 +260,6 @@ void jeuClavier(Jeu *j, const char touche)
         joueurHaut(&(j->niveau));
     case 'b':
         joueurBas(&(j->niveau));
-    case 'q':
-        quitterJeu(j);
     }
 }
 

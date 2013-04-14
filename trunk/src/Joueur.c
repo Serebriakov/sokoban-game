@@ -14,7 +14,7 @@ void creerJoueur(Joueur* j, const char* pseudo)
 
     /* Sauvegarde des données du joueur */
     char fichier[36];
-    strcpy(fichier, "../data/joueurs/");
+    strcpy(fichier, "data/joueurs/");
     strcat(fichier, j->pseudo);
     strcat(fichier, ".sok");
     FILE* fic = fopen(fichier, "wb");
@@ -26,22 +26,12 @@ void creerJoueur(Joueur* j, const char* pseudo)
 void chargerJoueur(Joueur* j, const char* pseudo)
 {
     char fichier[36];
-    strcpy(fichier, "../data/joueurs/");
+    strcpy(fichier, "data/joueurs/");
     strcat(fichier, pseudo);
     strcat(fichier, ".sok");
     FILE* fic = fopen(fichier, "rb");
     fread(j, sizeof(Joueur), 1, fic);
     fclose(fic);
-}
-
-
-int egaliteJoueur(const Joueur j1, const Joueur j2)
-{
-    if (strcmp(j1.pseudo, j2.pseudo))
-    {
-        return 1;
-    }
-    return 0;
 }
 
 
@@ -63,7 +53,7 @@ void modifierAvancement(Joueur* j, int niv)
 
     /* Sauvegarde des données du joueur */
     char fichier[36];
-    strcpy(fichier, "../data/joueurs");
+    strcpy(fichier, "data/joueurs");
     strcat(fichier, j->pseudo);
     strcat(fichier, ".sok");
     FILE* fic = fopen(fichier, "a+b");
@@ -76,7 +66,7 @@ void modifierAvancement(Joueur* j, int niv)
 void supprimerJoueur(Joueur* j)
 {
     char fichier[36];
-    strcpy(fichier, "../data/joueurs");
+    strcpy(fichier, "data/joueurs");
     strcat(fichier, j->pseudo);
     strcat(fichier, ".sok");
     remove(fichier);
