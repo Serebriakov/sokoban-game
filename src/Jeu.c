@@ -15,6 +15,7 @@ void initialiserJeu(Jeu *j, const char *pseudo)
 void chargerJeu(Jeu *j, const char *pseudo, const char *niveau)
 {
     chargerJoueur(&(j->joueur), pseudo);
+    initialiserNiveau(&(j->niveau), 1, 1);
     chargerNiveau(&(j->niveau), niveau);
 }
 
@@ -55,7 +56,7 @@ Position obtenirPositionJoueur(const Niveau *n)
 }
 
 
-void joueurGauche(const Niveau *n)
+void joueurGauche(Niveau *n)
 {
     Position pos_joueur = obtenirPositionJoueur(n);
 
@@ -179,7 +180,7 @@ void joueurHaut(Niveau *n)
     {
         modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
         modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
-        modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, CAISSE_OK);
+        modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE_OK);
     }
     if (elem_haut == CAISSE && elem_haut_haut == VIDE)
     {
@@ -254,12 +255,16 @@ void jeuClavier(Jeu *j, const char touche)
     {
     case 'g':
         joueurGauche(&(j->niveau));
+        break;
     case 'd':
         joueurDroite(&(j->niveau));
+        break;
     case 'h':
         joueurHaut(&(j->niveau));
+        break;
     case 'b':
         joueurBas(&(j->niveau));
+        break;
     }
 }
 

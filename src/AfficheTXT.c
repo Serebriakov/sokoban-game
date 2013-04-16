@@ -45,11 +45,11 @@ void afficherNumNiveau(const Niveau *n)
 void afficherNiveau(const Niveau *n)
 {
     int i, j;
-    for (i = 0; i < n->dimy; i++)
+    for (i = 0; i < n->dimx; i++)
     {
-        for (j = 0; j < n->dimx; j++)
+        for (j = 0; j < n->dimy; j++)
         {
-            printf("%d ", obtenirElementNiveau(n, i, j));
+            printf("%d ", obtenirElementNiveau(n, j, i));
         }
         printf("\n");
     }
@@ -58,7 +58,7 @@ void afficherNiveau(const Niveau *n)
 
 void afficherMenu(const Menu *m)
 {
-    printf("\nMenu\n");
+    printf("\n\nMenu\n\n");
     int i;
     for (i = 0; i < m->nb_lignes; i++)
     {
@@ -98,7 +98,6 @@ void boucleMenu(Menu *m)
 		cm = menuQuestion(m);
 		m->lignes[cm].commande();
 	}
-
 }
 
 
@@ -106,24 +105,31 @@ void afficherJeu(Jeu *j)
 {
     afficherNiveau(&(j->niveau));
     afficherPseudoJoueur(&(j->joueur));
+    printf("Niveau : ");
     afficherNumNiveau(&(j->niveau));
 }
 
 
 void boucleJeu(Jeu *j)
 {
-    char touche = '0';
+    char touche;
     while (!finJeu(j))
     {
-        while (!finNiveau(&j->niveau))
+
+        do
         {
             afficherJeu(j);
+            getchar();
+            printf("\nProchain mouvement : ");
             scanf("%c", &touche);
-            if (touche == 'q') exit(0);
+            if (touche == 'q') return;
             else jeuClavier(j, touche);
         }
-        niveauSuivant(j);
+        while (!finNiveau(&j->niveau));
+
+        if (j->niveau.num < NB_NIVEAUX) niveauSuivant(j);
+        else (j->niveau.num++); // Indique la fin du jeu
+
     }
+    printf("\nMerci d'avoir joué !\n");
 }
-
-

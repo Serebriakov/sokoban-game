@@ -53,12 +53,12 @@ void modifierAvancement(Joueur* j, int niv)
 
     /* Sauvegarde des données du joueur */
     char fichier[36];
-    strcpy(fichier, "data/joueurs");
+    strcpy(fichier, "data/joueurs/");
     strcat(fichier, j->pseudo);
     strcat(fichier, ".sok");
     FILE* fic = fopen(fichier, "a+b");
     fseek(fic, 16, SEEK_SET);
-    fwrite(&j->avancement, 4, 1, fic);
+    fwrite(&(j->avancement), 4, 1, fic);
     fclose(fic);
 }
 
@@ -66,7 +66,7 @@ void modifierAvancement(Joueur* j, int niv)
 void supprimerJoueur(Joueur* j)
 {
     char fichier[36];
-    strcpy(fichier, "data/joueurs");
+    strcpy(fichier, "data/joueurs/");
     strcat(fichier, j->pseudo);
     strcat(fichier, ".sok");
     remove(fichier);
