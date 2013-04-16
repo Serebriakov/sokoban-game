@@ -13,7 +13,7 @@
 #include "Joueur.h"
 #include "Niveau.h"
 
-#define NB_NIVEAUX 5
+#define NB_NIVEAUX 1
 
 
 /** \struct Jeu */

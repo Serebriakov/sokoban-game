@@ -70,15 +70,15 @@ int obtenirElementNiveau(const Niveau *n, int x, int y);
 
 /**
 
- \fn void modifierElementNiveau(const Niveau *n, int x, int y, int e)
+ \fn void modifierElementNiveau(Niveau *n, int x, int y, int e)
  \brief Modifie l'élément de coordonnées (x,y)
  \param[in] n Niveau
  \param[in] x Première coordonnée
  \param[in] y Deuxième coordonnée
- \param[in] e Nouvel élément$
+ \param[in] e Nouvel élément
 
  */
-void modifierElementNiveau(const Niveau *n, int x, int y, int e);
+void modifierElementNiveau(Niveau *n, int x, int y, int e);
 
 
 /**

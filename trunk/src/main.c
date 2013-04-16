@@ -11,7 +11,10 @@ void nouvellePartie()
 {
     Jeu j;
     char pseudo[36];
-    scanf("Entrez le nom du joueur : %s", pseudo);
+    printf("Entrez le nom du joueur : ");
+    scanf("%s", pseudo);
+    fflush(stdout);
+    printf("\n");
     initialiserJeu(&j, pseudo);
     boucleJeu(&j);
     quitterJeu(&j);
@@ -23,7 +26,8 @@ void chargerPartie()
     Joueur p;
     afficherJoueurs();
     char pseudo[16];
-    scanf("Entrez le nom d'un joueur : %s", pseudo);
+    printf("Entrez le nom du joueur : ");
+    scanf("%s", pseudo);
     chargerJoueur(&p, pseudo);
     Jeu j;
     char avancement[3];

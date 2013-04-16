@@ -98,7 +98,7 @@ int obtenirElementNiveau(const Niveau *n, int x, int y)
 }
 
 
-void modifierElementNiveau(const Niveau *n, int x, int y, int e)
+void modifierElementNiveau(Niveau *n, int x, int y, int e)
 {
     assert(x >= 0);
 	assert(y >= 0);
@@ -111,8 +111,8 @@ void modifierElementNiveau(const Niveau *n, int x, int y, int e)
 void sauvegarderNiveau(const Niveau *n, const char *fichier)
 {
     FILE *fic = fopen(fichier, "w");
-    fprintf(fic, "%d", n->dimx);
-    fprintf(fic, "%d", n->dimy);
+    fprintf(fic, "%d ", n->dimx);
+    fprintf(fic, "%d ", n->dimy);
     int i, j;
     for (i = 0 ; i < n->dimx ; i++)
     {
