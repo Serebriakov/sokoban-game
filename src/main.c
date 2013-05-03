@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "AfficheTXT.h"
-#include "Joueur.h"
-#include "Jeu.h"
-#include "Menu.h"
+#include "afficheTXT.h"
+#include "joueur.h"
+#include "jeu.h"
+#include "menu.h"
+#include "fichiers.h"
 
 
 void nouvellePartie()
@@ -23,16 +24,12 @@ void nouvellePartie()
 
 void chargerPartie()
 {
-    Joueur p;
-    afficherJoueurs();
+    Jeu j;
     char pseudo[16];
+    afficherJoueurs();
     printf("Entrez le nom du joueur : ");
     scanf("%s", pseudo);
-    chargerJoueur(&p, pseudo);
-    Jeu j;
-    char avancement[3];
-    sprintf(avancement, "%d", p.avancement);
-    chargerJeu(&j, p.pseudo, avancement);
+    chargerJeu(&j, pseudo);
     boucleJeu(&j);
     quitterJeu(&j);
 }
@@ -41,7 +38,7 @@ void chargerPartie()
 void quitter()
 {
     printf("Au revoir !\n");
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 
 
