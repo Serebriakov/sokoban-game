@@ -3,9 +3,9 @@
 #include <dirent.h>
 #include <string.h>
 
-#include "AfficheTXT.h"
-#include "Joueur.h"
-#include "Niveau.h"
+#include "afficheTXT.h"
+#include "constantes.h"
+#include "niveau.h"
 
 
 void afficherJoueurs()
@@ -23,11 +23,6 @@ void afficherJoueurs()
     closedir(dir);
 }
 
-
-void afficherPseudoJoueur(Joueur *j)
-{
-    printf("%s\n", obtenirPseudo(j));
-}
 
 
 void afficherAvancementJoueur(Joueur *j)
@@ -73,16 +68,16 @@ int menuQuestion(const Menu *m)
 {
     int cm;
     char dum[32];
-    int ok=0;
+    int ok = 0;
     do
     {
         if (scanf("%d",&cm)!=1) scanf("%s",dum);
-        if ((cm<0) || (cm>=m->nb_lignes))
+        if ((cm < 0) || (cm >= m->nb_lignes))
             printf("Erreur choix menu\n");
-        else ok=1;
+        else ok = 1;
         fflush(stdout);
     }
-    while(ok==0);
+    while(ok == 0);
     printf("\n");
     fflush(stdout);
     return cm;
@@ -101,10 +96,10 @@ void boucleMenu(Menu *m)
 }
 
 
-void afficherJeu(Jeu *j)
+void afficherJeu(const Jeu *j)
 {
     afficherNiveau(&(j->niveau));
-    afficherPseudoJoueur(&(j->joueur));
+    printf("%s\n", (j->joueur).pseudo);
     printf("Niveau : ");
     afficherNumNiveau(&(j->niveau));
 }
@@ -115,7 +110,6 @@ void boucleJeu(Jeu *j)
     char touche;
     while (!finJeu(j))
     {
-
         do
         {
             afficherJeu(j);
@@ -129,7 +123,6 @@ void boucleJeu(Jeu *j)
 
         if (j->niveau.num < NB_NIVEAUX) niveauSuivant(j);
         else (j->niveau.num++); // Indique la fin du jeu
-
     }
     printf("\nMerci d'avoir joué !\n");
 }
