@@ -13,6 +13,7 @@
 /*////////////////////////////////////////////////
 // FONCTIONS DE GESTION DES FICHIERS DE NIVEAUX //
 ////////////////////////////////////////////////*/
+
 /**
  * \fn void chargerNiveau(Niveau *n, int niv)
  * \brief Charge un niveau
@@ -31,16 +32,26 @@ void chargerNiveau(Niveau *n, int niv);
 void sauvegarderNiveau(const Niveau *n, const char *fichier);
 
 
+/**
+ * \fn int nbNiveaux()
+ * \brief Compte le nombre de niveaux
+ */
+int nbNiveaux();
+
+
+
 /*////////////////////////////////////////////////
 // FONCTIONS DE GESTION DES FICHIERS DE JOUEURS //
 ////////////////////////////////////////////////*/
+
 /**
- * \fn void creerJoueur(Joueur *j, const char *pseudo);
+ * \fn int creerJoueur(Joueur *j, const char *pseudo);
  * \brief Créer un nouveau joueur
  * \param[in, out] j Pointeur sur un joueur
  * \param[in] pseudo Pseudo du joueur à créer
+ * \return Retourne -1 si le max de joueurs a déjà été créé, ou 0 si un joueur a pu être créé.
  */
-void creerJoueur(Joueur *j, const char *pseudo);
+int creerJoueur(Joueur *j, const char *pseudo);
 
 
 /**
@@ -61,8 +72,8 @@ void sauvegarderJoueur(const Joueur *j);
 
 
 /**
- * \fn supprimerJoueur(const Joueur *j)
+ * \fn supprimerJoueur(const char *pseudo)
  * \brief Supprime un joueur
- * \param[in] j Pointeur sur un joueur
+ * \param[in] pseudo Pseudo du joueur à supprimer
  */
-void supprimerJoueur(Joueur *j);
+void supprimerJoueur(const char *pseudo);

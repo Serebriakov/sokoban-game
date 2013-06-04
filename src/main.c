@@ -1,55 +1,78 @@
 #include <stdlib.h>
-#include <stdio.h>
 
+#ifdef JEU_TXT
 #include "afficheTXT.h"
-#include "joueur.h"
-#include "jeu.h"
 #include "menu.h"
-#include "fichiers.h"
+#endif
+
+#ifdef JEU_SDL
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
+#include "afficheSDL.h"
+#endif
 
 
-void nouvellePartie()
+int main(int argc, char *argv[])
 {
-    Jeu j;
-    char pseudo[36];
-    printf("Entrez le nom du joueur : ");
-    scanf("%s", pseudo);
-    fflush(stdout);
-    printf("\n");
-    initialiserJeu(&j, pseudo);
-    boucleJeu(&j);
-    quitterJeu(&j);
-}
-
-
-void chargerPartie()
-{
-    Jeu j;
-    char pseudo[16];
-    afficherJoueurs();
-    printf("Entrez le nom du joueur : ");
-    scanf("%s", pseudo);
-    chargerJeu(&j, pseudo);
-    boucleJeu(&j);
-    quitterJeu(&j);
-}
-
-
-void quitter()
-{
-    printf("Au revoir !\n");
-    exit(EXIT_SUCCESS);
-}
-
-
-int main()
-{
-    Menu m;
+#ifdef JEU_TXT
+	// Initialisation du menu
+	Menu m;
     menuInit(&m);
+
+	// Construction du menu
     menuAjouterLigne(&m, "Nouvelle partie", nouvellePartie);
     menuAjouterLigne(&m, "Charger une partie", chargerPartie);
-    menuAjouterLigne(&m, "Quitter", quitter);
+    menuAjouterLigne(&m, "Quitter", NULL);
+    
+	// Boucle principale du programme
     boucleMenu(&m);
-    menuLibere(&m);
-    return 0;
+
+	// Libération du menu
+	menuLibere(&m);
+
+    return EXIT_SUCCESS;
+#endif
+
+
+#ifdef JEU_SDL
+	// Initialisation de SDL
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
+
+	// Initialisation de SDL_Mixer
+ 	Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
+	Mix_AllocateChannels(2);
+
+	// Initialisation de SDL_TTF
+	TTF_Init();
+	
+	// Icône de la fenêtre
+	SDL_Surface *icone = NULL;
+	icone = IMG_Load("data/images/icone.png");           
+	SDL_WM_SetIcon(icone, NULL);
+    SDL_FreeSurface(icone);
+
+    // Dimensions et légende de la fenêtre
+	SDL_Surface *ecran = NULL;
+	ecran = SDL_SetVideoMode(600, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	SDL_WM_SetCaption("Sokoban Legends", "Sokoban Legends");
+
+	// Masquage de la souris
+	SDL_ShowCursor(SDL_DISABLE);
+
+	// Boucle principale du programme
+	boucleMenu(ecran);
+
+	// Libération de TTF
+	TTF_Quit();
+
+	// Libération de SDL_Mixer
+	Mix_CloseAudio();
+
+	// Libération de SDL (libère aussi la surface ecran)
+	SDL_Quit();
+
+    return EXIT_SUCCESS;
+#endif
 }
