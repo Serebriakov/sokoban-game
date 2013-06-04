@@ -2,12 +2,13 @@
 #define _JEU
 
 /**
- * \file Jeu.h
+ * \file jeu.h
  * \author Steven Durrenmath
-*/
+ */
 
 #include "joueur.h"
 #include "niveau.h"
+#include "fichiers.h"
 
 
 /** \struct Jeu */
@@ -18,8 +19,10 @@ typedef struct
 } Jeu;
 
 
-/** \struct Position */
-/* Structure auxiliaire permettant de chercher la position du joueur et de la modifier */
+/** 
+ * \struct Position
+ * \brief Contiendra la position du joueur
+ */
 typedef struct
 {
     int x;
@@ -31,13 +34,13 @@ typedef struct
  * \fn void initialiserJeu(Jeu *j, const char *pseudo)
  * \brief Initialise un jeu
  * \param[in, out] j Pointeur sur un jeu
- * \param[in] pseudo Nom du joueur
+ * \param[in] pseudo Pseudo du joueur
  */
 void initialiserJeu(Jeu *j, const char *pseudo);
 
 
 /**
- * \fn void chargerJeu(Jeu *j, const char *pseudo, const char *niveau)
+ * \fn void chargerJeu(Jeu *j, const char *pseudo)
  * \brief Permet de charger la partie d'un joueur
  * \param[in, out] j Pointeur sur un jeu
  * \param[in] pseudo Pseudo du joueur
@@ -64,9 +67,17 @@ void libererJeu(Jeu *j);
 /**
  * \fn void quitterJeu(Jeu *j)
  * \brief Quitte le jeu en sauvegardant
- * \param[in, out] Pointeur sur un jeu
+ * \param[in, out] j Pointeur sur un jeu
  */
 void quitterJeu(Jeu *j);
+
+
+/**
+ * \fn Position obtenirPositionJoueur(const Niveau *n)
+ * \brief Permet d'obtenir la position du joueur
+ * \param[in] n Pointeur sur un niveau
+ */
+Position obtenirPositionJoueur(const Niveau *n);
 
 
 /**
@@ -74,8 +85,9 @@ void quitterJeu(Jeu *j);
  * \brief Gère les déplacements du joueur au clavier
  * \param[in, out] j Pointeur sur un jeu
  * \param[in] touche Touche du clavier
+ * \return Retourne 1 si le joueur a pu se déplacer, 0 sinon
  */
-void jeuClavier(Jeu *j, const char touche);
+int jeuClavier(Jeu *j, const char touche);
 
 
 /**

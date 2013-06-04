@@ -7,6 +7,9 @@
  */
 
 
+#include "constantes.h"
+
+
  /** \struct Niveau */
  typedef struct
  {
@@ -17,7 +20,7 @@
  } Niveau;
 
 
- /**
+/**
   * \fn void initialiserNiveau(Niveau *n, int dimx, int dimy)
   * \brief Initialise un niveau
   * \param[in, out] n Pointeur sur un niveau
@@ -25,6 +28,39 @@
   * \param[in] dimy Nombre de blocs en hauteur
   */
 void initialiserNiveau(Niveau *n, int dimx, int dimy);
+
+
+/**
+  * \fn int obtenirNumNiveau(const Niveau *n)
+  * \param[in] n Pointeur sur un niveau
+  * \return Retourne le numéro du niveau
+  */
+int obtenirNumNiveau(const Niveau *n);
+
+
+/**
+  * \fn void modifierNumNiveau(Niveau *n, int niv)
+  * \brief Modifier le numéro du niveau
+  * \param[in, out] n Pointeur sur un niveau
+  * \param[in] niv Niveau
+  */
+void modifierNumNiveau(Niveau *n, int niv);
+
+
+/**
+  * \fn int obtenirDimXNiveau(const Niveau *n)
+  * \param[in] n Pointeur sur un niveau
+  * \return Retourne la dimension x du niveau
+  */
+int obtenirDimXNiveau(const Niveau *n);
+
+
+/**
+  * \fn int obtenirDimYNiveau(const Niveau *n)
+  * \param[in] n Pointeur sur un niveau
+  * \return Retourne la dimension y du niveau
+  */
+int obtenirDimYNiveau(const Niveau *n);
 
 
 /**
@@ -54,6 +90,13 @@ void modifierElementNiveau(Niveau *n, int x, int y, int e);
  * \param[in, out] n Pointeur sur un niveau
  */
 void libererNiveau(Niveau *n);
+
+
+/**
+ * \fn void testRegressionNiveau()
+ * \brief Teste toutes les procédures du module Niveau
+*/
+void testRegressionNiveau();
 
 
 #endif

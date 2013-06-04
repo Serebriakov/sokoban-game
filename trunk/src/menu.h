@@ -2,7 +2,7 @@
 #define _MENU
 
 /**
- * \file Menu.h
+ * \file menu.h
  * \author Steven Durrenmath
  */
 

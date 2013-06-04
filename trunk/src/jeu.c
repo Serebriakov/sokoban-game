@@ -1,14 +1,12 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "jeu.h"
-#include "fichiers.h"
-#include "constantes.h"
 
 
 void initialiserJeu(Jeu *j, const char *pseudo)
 {
-    creerJoueur(&(j->joueur), pseudo);
     initialiserNiveau(&(j->niveau), 1, 1);
     chargerNiveau(&(j->niveau), 1);
 }
@@ -26,6 +24,7 @@ void chargerJeu(Jeu *j, const char *pseudo)
 void changerNiveau(Jeu *j, int niv)
 {
     chargerNiveau(&(j->niveau), niv);
+	modifierAvancement(&(j->joueur), niv);
 }
 
 
@@ -35,7 +34,6 @@ void niveauSuivant(Jeu *j)
 }
 
 
-// Fonction auxiliaire //
 Position obtenirPositionJoueur(const Niveau *n)
 {
     int x, y;
@@ -59,7 +57,7 @@ Position obtenirPositionJoueur(const Niveau *n)
 
 
 // Procédure auxiliaire //
-void joueurGauche(Niveau *n)
+int joueurGauche(Niveau *n)
 {
     Position pos_joueur;
     obtenirPositionJoueur(n);
@@ -75,6 +73,7 @@ void joueurGauche(Niveau *n)
     else
     {
         elem_gauche = MUR;
+		return 0;
     }
 
 
@@ -93,24 +92,43 @@ void joueurGauche(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR);
+			return 1;
         }
         if (elem_gauche == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_gauche == CAISSE && elem_gauche_gauche == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE_OK);
+			return 1;
         }
         if (elem_gauche == CAISSE && elem_gauche_gauche == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE);
+			return 1;
         }
+        if (elem_gauche == CAISSE_OK && elem_gauche_gauche == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE);
+			return 1;
+        }
+        if (elem_gauche == CAISSE_OK && elem_gauche_gauche == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
 
     if (obtenirElementNiveau(n, pos_joueur.x, pos_joueur.y) == JOUEUR_CIBLE) // Le joueur est sur une cible
@@ -119,30 +137,50 @@ void joueurGauche(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR);
+			return 1;
         }
         if (elem_gauche == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_gauche == CAISSE && elem_gauche_gauche == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE_OK);
+			return 1;
         }
         if (elem_gauche == CAISSE && elem_gauche_gauche == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE);
+			return 1;
         }
+        if (elem_gauche == CAISSE_OK && elem_gauche_gauche == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE);
+			return 1;
+        }
+        if (elem_gauche == CAISSE_OK && elem_gauche_gauche == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x-1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x-2, pos_joueur.y, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
+	return 0;
 }
 
 
 // Procédure auxiliaire
-void joueurDroite(Niveau *n)
+int joueurDroite(Niveau *n)
 {
     Position pos_joueur;
     int elem_droite; // On va regarder l'élément à droite du joueur
@@ -157,6 +195,7 @@ void joueurDroite(Niveau *n)
     else
     {
         elem_droite = MUR;
+		return 0;
     }
     if (pos_joueur.x+2 < n->dimx)
     {
@@ -173,24 +212,43 @@ void joueurDroite(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR);
+			return 1;
         }
         if (elem_droite == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_droite == CAISSE && elem_droite_droite == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE_OK);
+			return 1;
         }
         if (elem_droite == CAISSE && elem_droite_droite == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE);
+			return 1;
         }
+        if (elem_droite == CAISSE_OK && elem_droite_droite == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE);
+			return 1;
+        }
+        if (elem_droite == CAISSE_OK && elem_droite_droite == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
 
     if (obtenirElementNiveau(n, pos_joueur.x, pos_joueur.y) == JOUEUR_CIBLE) // Le joueur est sur une cible
@@ -199,30 +257,50 @@ void joueurDroite(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR);
+			return 1;
         }
         if (elem_droite == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_droite == CAISSE && elem_droite_droite == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE_OK);
+			return 1;
         }
         if (elem_droite == CAISSE && elem_droite_droite == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE);
+			return 1;
         }
+        if (elem_droite == CAISSE_OK && elem_droite_droite == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE);
+			return 1;
+        }
+        if (elem_droite == CAISSE_OK && elem_droite_droite == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x+1, pos_joueur.y, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x+2, pos_joueur.y, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
+	return 0;
 }
 
 
 // Procédure auxiliaire //
-void joueurHaut(Niveau *n)
+int joueurHaut(Niveau *n)
 {
     Position pos_joueur;
     pos_joueur = obtenirPositionJoueur(n);
@@ -236,6 +314,7 @@ void joueurHaut(Niveau *n)
     else
     {
         elem_haut = MUR;
+		return 0;
     }
     if (pos_joueur.y-2 >= 0)
     {
@@ -252,24 +331,43 @@ void joueurHaut(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
+			return 1;
         }
         if (elem_haut == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_haut == CAISSE && elem_haut_haut == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE_OK);
+			return 1;
         }
         if (elem_haut == CAISSE && elem_haut_haut == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE);
+			return 1;
         }
+        if (elem_haut == CAISSE_OK && elem_haut_haut == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE);
+			return 1;
+        }
+        if (elem_haut == CAISSE_OK && elem_haut_haut == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
     if (obtenirElementNiveau(n, pos_joueur.x, pos_joueur.y) == JOUEUR_CIBLE) // Le joueur est sur une cible
     {
@@ -277,30 +375,50 @@ void joueurHaut(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
+			return 1;
         }
         if (elem_haut == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_haut == CAISSE && elem_haut_haut == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE_OK);
+			return 1;
         }
         if (elem_haut == CAISSE && elem_haut_haut == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE);
+			return 1;
         }
+        if (elem_haut == CAISSE_OK && elem_haut_haut == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE);
+			return 1;
+        }
+        if (elem_haut == CAISSE_OK && elem_haut_haut == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y-2, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
+	return 0;
 }
 
 
 // Procédure auxiliaire //
-void joueurBas(Niveau *n)
+int joueurBas(Niveau *n)
 {
     Position pos_joueur;
     int elem_bas; // On va regarder l'élément en bas du joueur
@@ -315,6 +433,7 @@ void joueurBas(Niveau *n)
     else
     {
         elem_bas = MUR;
+		return 0;
     }
     if (pos_joueur.y+2 < n->dimy)
     {
@@ -331,24 +450,43 @@ void joueurBas(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR);
+			return 1;
         }
         if (elem_bas == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_bas == CAISSE && elem_bas_bas == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE_OK);
+			return 1;
         }
         if (elem_bas == CAISSE && elem_bas_bas == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE);
+			return 1;
         }
+        if (elem_bas == CAISSE_OK && elem_bas_bas == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE);
+			return 1;
+        }
+        if (elem_bas == CAISSE_OK && elem_bas_bas == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, VIDE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
 
     if (obtenirElementNiveau(n, pos_joueur.x, pos_joueur.y) == JOUEUR_CIBLE) // Le joueur est sur une cible
@@ -357,25 +495,45 @@ void joueurBas(Niveau *n)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR);
+			return 1;
         }
         if (elem_bas == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR_CIBLE);
+			return 1;
         }
         if (elem_bas == CAISSE && elem_bas_bas == CIBLE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE_OK);
+			return 1;
         }
         if (elem_bas == CAISSE && elem_bas_bas == VIDE)
         {
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR);
             modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE);
+			return 1;
         }
+        if (elem_bas == CAISSE_OK && elem_bas_bas == VIDE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE);
+			return 1;
+        }
+        if (elem_bas == CAISSE_OK && elem_bas_bas == CIBLE)
+        {
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y, CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+1, JOUEUR_CIBLE);
+            modifierElementNiveau(n, pos_joueur.x, pos_joueur.y+2, CAISSE_OK);
+			return 1;
+        }
+		else return 0;
     }
+	return 0;
 }
 
 
@@ -387,29 +545,30 @@ void libererJeu(Jeu *j)
 
 void quitterJeu(Jeu *j)
 {
-    modifierAvancement(&(j->joueur), (j->niveau).num);
+	if (j->niveau.num <= nbNiveaux()) j->joueur.avancement = j->niveau.num;
     sauvegarderJoueur(&(j->joueur));
     libererJeu(j);
 }
 
 
-void jeuClavier(Jeu *j, const char touche)
+int jeuClavier(Jeu *j, const char touche)
 {
     switch (touche)
     {
-    case 'g':
-        joueurGauche(&(j->niveau));
-        break;
-    case 'd':
-        joueurDroite(&(j->niveau));
-        break;
     case 'h':
-        joueurHaut(&(j->niveau));
-        break;
+        if(joueurHaut(&(j->niveau))) return 1;
+		else return 0;
     case 'b':
-        joueurBas(&(j->niveau));
-        break;
+        if(joueurBas(&(j->niveau))) return 1;
+		else return 0;
+    case 'g':
+        if(joueurGauche(&(j->niveau))) return 1;
+		else return 0;
+    case 'd':
+        if (joueurDroite(&(j->niveau))) return 1;
+		else return 0;
     }
+	return 0;
 }
 
 
@@ -420,7 +579,7 @@ int finNiveau(Niveau *n)
     {
         for (j = 0; j < n->dimy; j++)
         {
-            if (obtenirElementNiveau(n, i, j) == CIBLE)
+            if (obtenirElementNiveau(n, i, j) == CIBLE || obtenirElementNiveau(n, i, j) == JOUEUR_CIBLE)
             {
                 return 0;
             }
@@ -432,7 +591,7 @@ int finNiveau(Niveau *n)
 
 int finJeu(Jeu *j)
 {
-    if ((j->niveau).num > NB_NIVEAUX) return 1;
+    if ((j->niveau).num > nbNiveaux()) return 1;
     else return 0;
 }
 
